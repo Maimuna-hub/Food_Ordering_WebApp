@@ -1,21 +1,58 @@
-import React from "react";
+import React, { Component } from "react";
 import Header from './Header/Header';
 import BurgerPrepare from "./BurgerPrepare/BurgerPrepare";
 import Orders from "./Orders/Orders";
 import Checkout from "./Orders/Checkout/Checkout";
-import { Route } from 'react-router-dom';
+import { Route, Switch, Redirect } from 'react-router-dom';
+import Auth from "./Auth/Auth";
+import { connect } from "react-redux";
+import Logout from "./Auth/Logout";
+import { authCheck } from "../Redux/AuthActionCreators";
 
-const Main = (props) => {
-    return (
-        <div>
-            <Header />
-            <div className="container">
-                <Route path="/orders" component={Orders} />
-                <Route path="/checkout" component={Checkout} />
-                <Route path="/" exact component={BurgerPrepare} />
-            </div>
-        </div>
-    );
+const mapStateToProps = state => {
+    return {
+        token: state.token,
+    }
+}
+const mapDispatchToProps = dispatch => {
+    return {
+        authCheck: () => dispatch(authCheck()),
+    }
 }
 
-export default Main;
+class Main extends Component {
+    componentDidMount() {
+        this.props.authCheck();
+    }
+    render() {
+        let routes = null;
+        if (this.props.token === null) {
+            routes = (
+                <Switch>
+                    <Route path="/login" component={Auth} />
+                    <Redirect to="/login" />
+                </Switch>
+            )
+        } else {
+            routes = (
+                <Switch>
+                    <Route path="/orders" component={Orders} />
+                    <Route path="/checkout" component={Checkout} />
+                    <Route path="/logout" component={Logout} />
+                    <Route path="/" exact component={BurgerPrepare} />
+                    <Redirect to="/" />
+                </Switch>
+            )
+        }
+        return (
+            <div>
+                <Header />
+                <div className="container">
+                    {routes}
+                </div>
+            </div>
+        )
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

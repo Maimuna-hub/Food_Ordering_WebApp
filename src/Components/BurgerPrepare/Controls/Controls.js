@@ -12,8 +12,8 @@ const BuildControl = props => {
     return (
         <div className="d-flex">
             <div className="me-auto ml-5" style={{ fontWeight: "bold", fontSize: "1.2rem" }}>{props.label}</div>
-            <button className="btn btn-dark btn-sm m-1" onClick={props.remove}>Less</button>
-            <button className="btn btn-sm m-1" style={{ backgroundColor: "#FBB03B" }} onClick={props.added}>More</button>
+            <button className="btn btn-dark btn-sm m-1" onClick={props.remove}>-</button>
+            <button className="btn btn-sm m-1" style={{ backgroundColor: "#FBB03B" }} onClick={props.added}>+</button>
         </div>
     )
 }
@@ -47,7 +47,7 @@ const Controls = props => {
                     }
                 </CardBody>
                 <CardFooter><h5>Price:<strong>{props.price}</strong> BDT</h5></CardFooter>
-                <Button disabled={!props.purchasable} onClick={props.toggleModal}>Order Now</Button>
+                <Button style={{ backgroundColor: "#1B1A1A", color: "#FFBA00" }} disabled={!props.purchasable} onClick={props.toggleModal}>Order Now</Button>
             </Card>
         </div >
     )
